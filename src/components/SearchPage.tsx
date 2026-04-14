@@ -13,7 +13,7 @@ import {
     ContextMenuItem,
     ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { useAppStore } from '@/store/appStore';
+import { useNavigationStore } from '@/store/navigationStore';
 
 export default function SearchPage() {
 
@@ -147,11 +147,11 @@ export default function SearchPage() {
                                     </ContextMenuTrigger>
                                     <ContextMenuContent>
                                         <ContextMenuItem onClick={() => {
-                                            useAppStore.getState().setSelectAsset({
+                                            useNavigationStore.getState().setSelectAsset({
                                                 snapshot: snapshot!,
                                                 asset: entry
                                             });
-                                            useAppStore.getState().setPage("depend");
+                                            useNavigationStore.getState().setPage("depend");
                                         }}>
                                             Open dependency details
                                         </ContextMenuItem>

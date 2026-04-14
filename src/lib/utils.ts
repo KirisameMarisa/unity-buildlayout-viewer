@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { DiffEntry } from "./types";
+import { format } from 'date-fns/format';
+import { ja } from 'date-fns/locale/ja';
+import { DiffEntry, Snapshot } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -141,6 +143,11 @@ export function BuildDiffResultText(
         }
     }
     return parts.join("\n");
+}
+
+export function formatSnapshotLabel(v: Snapshot): string {
+    const formatted = format(new Date(v.build_time), "yyyy/MM/dd HH:mm", { locale: ja });
+    return `${formatted} / ${v.player_version}`;
 }
 
 export function formatElapsed(elapsedMs: number): string {

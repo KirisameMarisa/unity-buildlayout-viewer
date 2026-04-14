@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { AssetEntry, UpstreamLine } from "@/lib/types";
 import { fetchUpstreamChain } from "@/lib/client/api";
-import { useAppStore } from "@/store/appStore";
+import { useNavigationStore } from "@/store/navigationStore";
 
 export default function DependencyViewer() {
-    const appState = useAppStore();
+    const appState = useNavigationStore();
     const selectAsset = appState.selectAsset;
     if (!selectAsset) return null;
 

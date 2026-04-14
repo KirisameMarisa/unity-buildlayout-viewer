@@ -6,14 +6,14 @@ interface SelectAsset {
     asset: AssetEntry;
 }
 
-interface appState {
+interface NavigationState {
     currentPage: string;
     setPage: (v: string) => void;
     selectAsset: SelectAsset | null;
     setSelectAsset: (select: SelectAsset) => void;
 }
 
-export const useAppStore = create<appState>((set, get) => ({
+export const useNavigationStore = create<NavigationState>((set) => ({
     currentPage: "",
     selectAsset: null,
     setPage: (v) => {

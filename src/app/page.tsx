@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import SearchPage from '@/components/SearchPage';
 import DiffPage from '@/components/DiffPage';
 import DependencyViewer from '@/components/DependencyViewer';
@@ -16,7 +16,7 @@ import {
     faUpload
 
 } from '@fortawesome/free-solid-svg-icons'
-import { useAppStore } from '@/store/appStore';
+import { useNavigationStore } from '@/store/navigationStore';
 
 interface ToolButtonProps {
     icon: IconDefinition;
@@ -27,7 +27,7 @@ interface ToolButtonProps {
 export default function Home() {
     const DEFAULT_PAGE = "search";
 
-    const { currentPage, setPage } = useAppStore();
+    const { currentPage, setPage } = useNavigationStore();
 
     useEffect(() => setPage(DEFAULT_PAGE), [])
 
