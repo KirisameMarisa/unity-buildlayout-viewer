@@ -6,7 +6,7 @@ import SnapshotDiffSelector from "./snapshot-diff-selector";
 import ProgressBar from "@/components/ui/progress-bar";
 import SearchBox from "@/components/ui/search-box";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { fetchDiff } from "@/lib/client/api";
+import { fetchDiff } from "@/lib/api";
 import { BuildDiffResultText } from "@/lib/utils";
 import DiffAvsBView from "./diff-a-vs-b-view";
 import DiffBundleView from "./diff-bundle-view";

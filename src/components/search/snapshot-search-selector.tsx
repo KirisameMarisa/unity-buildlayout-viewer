@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo } from 'react';
-import { fetchEntriesForSnapshot, fetchLinksForSnapshot } from '@/lib/client/api';
+import { fetchEntriesForSnapshot, fetchLinksForSnapshot } from '@/lib/api';
 import { AssetEntry, AssetLink, Snapshot } from '@/lib/types';
 import { formatSnapshotLabel } from '@/lib/utils';
 import ComboBox from '@/components/ui/combo-box';

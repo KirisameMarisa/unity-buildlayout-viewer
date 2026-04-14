@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getPlatforms, getReleaseTags, getSnapshots } from '@/lib/client/api';
+import { getPlatforms, getReleaseTags, getSnapshots } from '@/lib/api';
 import { Snapshot } from '@/lib/types';
 import { formatSnapshotLabel } from '@/lib/utils';
 

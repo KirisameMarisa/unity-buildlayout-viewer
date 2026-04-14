@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns/format';
 import { Snapshot } from '@/lib/types';
-import { EditSnapshot, getPlatforms, getReleaseTags, getSnapshots } from '@/lib/client/api';
+import { EditSnapshot, getPlatforms, getReleaseTags, getSnapshots } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';

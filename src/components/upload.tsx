@@ -7,7 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { uploadBuildLayout, prepareUpload, getUploadProgress, clearUpload } from '@/lib/client/api';
+import { uploadBuildLayout, prepareUpload, getUploadProgress, clearUpload } from '@/lib/api';
 import path from 'path'
 import { formatElapsed } from '@/lib/utils';
 import { env } from '@/lib/env';

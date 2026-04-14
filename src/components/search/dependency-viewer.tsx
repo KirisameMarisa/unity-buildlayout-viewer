@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { AssetEntry, UpstreamLine } from "@/lib/types";
-import { fetchUpstreamChain } from "@/lib/client/api";
+import { fetchUpstreamChain } from "@/lib/api";
 import { useNavigationStore } from "@/store/navigation-store";
 
 export default function DependencyViewer() {

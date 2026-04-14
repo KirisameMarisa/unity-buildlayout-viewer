@@ -1,4 +1,4 @@
-import { AssetEntry, AssetLink, DiffEntry, Snapshot, UploadStepMsg, UpstreamLine } from "../types";
+import { AssetEntry, AssetLink, DiffEntry, Snapshot, UploadStepMsg, UpstreamLine } from "./types";
 
 export async function fetchDiff(snapAId: number, snapBId: number): Promise<{ diffEntries: DiffEntry[]; diffBundleMap: Map<string, Set<string>> }> {
     const res = await fetch(`/api/diff?snap_a=${snapAId}&snap_b=${snapBId}`)
