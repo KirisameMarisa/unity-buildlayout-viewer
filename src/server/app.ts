@@ -9,8 +9,8 @@ import Busboy from 'busboy'
 import { BuildDiffResultText } from '@/lib/utils'
 import { prisma } from '@/server/lib/db';
 import { collectDiffFileInBundle, constructDiffEntries, buildRevAdj, computeUpstreamChain } from '@/server/lib/graph'
-import { getCachedRevAdj, setCachedRevAdj } from '@/server/lib/revAdjCache'
-import { analyzeBuildLayout, step } from '@/server/lib/asset_analyzer'
+import { getCachedRevAdj, setCachedRevAdj } from '@/server/lib/rev-adj-cache'
+import { analyzeBuildLayout, step } from '@/server/lib/asset-analyzer'
 
 const app = new Hono().basePath('/api')
 

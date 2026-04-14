@@ -3,9 +3,9 @@
 import { useEffect } from 'react';
 import SearchPage from '@/components/search';
 import DiffPage from '@/components/diff';
-import DependencyViewer from '@/components/search/DependencyViewer';
-import UploadDialog from '@/components/Upload';
-import SnapshotsEditor from '@/components/SnapshotsEditor';
+import DependencyViewer from '@/components/search/dependency-viewer';
+import UploadDialog from '@/components/upload';
+import SnapshotsEditor from '@/components/snapshots-editor';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
@@ -16,7 +16,7 @@ import {
     faUpload
 
 } from '@fortawesome/free-solid-svg-icons'
-import { useNavigationStore } from '@/store/navigationStore';
+import { useNavigationStore } from '@/store/navigation-store';
 
 interface ToolButtonProps {
     icon: IconDefinition;

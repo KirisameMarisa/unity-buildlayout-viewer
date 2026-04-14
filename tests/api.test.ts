@@ -308,13 +308,13 @@ describe('revAdj cache', () => {
     });
 
     it('cache is populated after the first request', async () => {
-        const { getCachedRevAdj } = await import('@/server/lib/revAdjCache');
+        const { getCachedRevAdj } = await import('@/server/lib/rev-adj-cache');
         await app.request(`/api/analyze/buildlayout/${snapAId}/upstream-chain/4`);
         expect(getCachedRevAdj(snapAId)).not.toBeNull();
     });
 
     it('different maxDepth/maxChildren return different line counts but same cache', async () => {
-        const { getCachedRevAdj } = await import('@/server/lib/revAdjCache');
+        const { getCachedRevAdj } = await import('@/server/lib/rev-adj-cache');
 
         const shallow = await app.request(`/api/analyze/buildlayout/${snapAId}/upstream-chain/4?maxDepth=1`);
         const deep    = await app.request(`/api/analyze/buildlayout/${snapAId}/upstream-chain/4?maxDepth=6`);

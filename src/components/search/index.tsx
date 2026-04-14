@@ -1,22 +1,14 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { AssetEntry, classColorMap, Filter, Snapshot } from '@/lib/types';
-import SnapshotSearchSelector from './SnapshotSearchSelector';
-import SearchBox from '../ui/search-box';
-import FilterRadioSelector from '../ui/filter-radio-selector';
-import ProgressBar from '../ui/progress-bar';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import {
-    ContextMenu,
-    ContextMenuContent,
-    ContextMenuItem,
-    ContextMenuTrigger,
-} from "@/components/ui/context-menu";
-import { useNavigationStore } from '@/store/navigationStore';
+import SnapshotSearchSelector from './snapshot-search-selector';
+import SearchBox from '@/components/ui/search-box';
+import FilterRadioSelector from '@/components/ui/filter-radio-selector';
+import ProgressBar from '@/components/ui/progress-bar';
+import AssetList from './asset-list';
 
 export default function SearchPage() {
-
     const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
     const [assetEntries, setAssetEntries] = useState<AssetEntry[]>([]);
     const [filteredEntries, setFilteredEntries] = useState<AssetEntry[]>([]);
@@ -26,14 +18,6 @@ export default function SearchPage() {
 
     const [totalEntryCount, setTotalEntryCount] = useState<number>();
     const [entryCount, setEntryCount] = useState<number>();
-
-    const parentRef = useRef<HTMLDivElement>(null);
-    const rowVirtualizer = useVirtualizer({
-        count: filteredEntries.length,
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => 36,
-        overscan: 10,
-    });
 
     const collator = useMemo(
         () => new Intl.Collator(undefined, { sensitivity: "base" }),
@@ -61,17 +45,15 @@ export default function SearchPage() {
 
     useEffect(() => {
         const entry = filteredEntries.length === 0 ? assetEntries : filteredEntries;
-        let extMap: Record<string, string> = {}
+        const extMap: Record<string, string> = {};
         entry.forEach((e) => {
             const ext = getExt(e.name!);
-            if (ext !== "")
-                extMap[ext] = "text-white";
-        })
-
+            if (ext !== "") extMap[ext] = "text-white";
+        });
         setExtFilterMap(extMap);
         setTotalEntryCount(assetEntries.length);
         setEntryCount(entry.length);
-    }, [assetEntries, filteredEntries])
+    }, [assetEntries, filteredEntries]);
 
     useEffect(() => {
         const f = filter;
@@ -85,11 +67,9 @@ export default function SearchPage() {
             const qLower = q.toLowerCase();
             const rx = q ? (hasWildcard ? toWildcardRegex(q) : null) : null;
 
-            // filter
             result = result.filter((e) => {
                 if (wantsClass && e.class_name !== f!.className) return false;
                 if (wantsExt && getExt(e.name!) !== f!.extName) return false;
-
                 if (q) {
                     if (rx) {
                         if (!rx.test(e.name!) && !(e.guid && rx.test(e.guid))) return false;
@@ -97,9 +77,7 @@ export default function SearchPage() {
                         // fast path (no wildcard): includes(lowercase)
                         const nameLower = e.name!.toLowerCase();
                         const guidLower = e.guid ? e.guid.toLowerCase() : "";
-
-                        if (!nameLower.includes(qLower) && !guidLower.includes(qLower))
-                            return false;
+                        if (!nameLower.includes(qLower) && !guidLower.includes(qLower)) return false;
                     }
                 }
                 return true;
@@ -113,57 +91,6 @@ export default function SearchPage() {
 
         setFilteredEntries(result);
     }, [filter, assetEntries, collator]);
-
-    const VirtualScrollTable = () => {
-        return (
-            <div
-                ref={parentRef}
-                className="overflow-auto max-h-[69vh] border border-gray-600 rounded-md"
-            >
-                <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative' }}>
-                    {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                        const object = filteredEntries;
-                        const entry = object[virtualRow.index];
-                        const color = classColorMap[entry.class_name!] ?? "bg-gray-700";
-
-                        return (
-                            <div
-                                key={virtualRow.key}
-                                ref={rowVirtualizer.measureElement}
-                                style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    width: '100%',
-                                    transform: `translateY(${virtualRow.start}px)`,
-                                }}
-                            >
-                                <ContextMenu>
-                                    <ContextMenuTrigger asChild>
-                                        <div className={`flex border-b border-gray-700 px-4 py-2 hover:bg-gray-800 truncate`}>
-                                            <span className={`${color} px-1`}>■</span>
-                                            <span className="text-white truncate">{entry.name}</span>
-                                        </div>
-                                    </ContextMenuTrigger>
-                                    <ContextMenuContent>
-                                        <ContextMenuItem onClick={() => {
-                                            useNavigationStore.getState().setSelectAsset({
-                                                snapshot: snapshot!,
-                                                asset: entry
-                                            });
-                                            useNavigationStore.getState().setPage("depend");
-                                        }}>
-                                            Open dependency details
-                                        </ContextMenuItem>
-                                    </ContextMenuContent>
-                                </ContextMenu>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div>
@@ -181,36 +108,25 @@ export default function SearchPage() {
             </div>
             <div>
                 <SearchBox
-                    onChangedText={(x) =>
-                        setFilter((prev) => ({ ...prev, searchText: x }))
-                    }
+                    onChangedText={(x) => setFilter((prev) => ({ ...prev, searchText: x }))}
                 />
                 <FilterRadioSelector
                     colorMap={classColorMap}
-                    onChage={(x) =>
-                        setFilter((prev) => ({ ...prev, className: x }))
-                    }
+                    onChage={(x) => setFilter((prev) => ({ ...prev, className: x }))}
                 />
                 <FilterRadioSelector
                     colorMap={extFilterMap}
-                    onChage={(x) =>
-                        setFilter((prev) => ({ ...prev, extName: x }))
-                    }
+                    onChage={(x) => setFilter((prev) => ({ ...prev, extName: x }))}
                 />
-
                 <div className="relative">
-                    <div
-                        className="absolute top-2 right-2 z-20 pointer-events-none"
-                        aria-live="polite"
-                    >
+                    <div className="absolute top-2 right-2 z-20 pointer-events-none" aria-live="polite">
                         <span className="px-2 py-1 rounded-full text-xs text-white bg-black/60 border border-white/20 backdrop-blur">
                             {entryCount} / {totalEntryCount}
                         </span>
                     </div>
                 </div>
-
-                {VirtualScrollTable()}
+                <AssetList filteredEntries={filteredEntries} snapshot={snapshot} />
             </div>
         </div>
     );
-};
+}

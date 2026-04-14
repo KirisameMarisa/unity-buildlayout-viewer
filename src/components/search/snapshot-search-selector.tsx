@@ -5,9 +5,9 @@ import { fetchEntriesForSnapshot, fetchLinksForSnapshot } from '@/lib/client/api
 import { AssetEntry, AssetLink, Snapshot } from '@/lib/types';
 import { formatSnapshotLabel } from '@/lib/utils';
 import ComboBox from '@/components/ui/combo-box';
-import { useNavigationStore } from '@/store/navigationStore';
-import { useSelectorStore } from '@/store/selectorStore';
-import { usePlatforms, useSnapshotData } from '@/lib/hooks/useSnapshotData';
+import { useNavigationStore } from '@/store/navigation-store';
+import { useSelectorStore } from '@/store/selector-store';
+import { usePlatforms, useSnapshotData } from '@/lib/hooks/use-snapshot-data';
 
 interface SnapshotSearchSelectorProps {
     onChangeSnapshot?: (snapshot: Snapshot) => void;
