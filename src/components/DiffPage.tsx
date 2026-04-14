@@ -121,7 +121,7 @@ export default function DiffPage() {
             }
             const children = Array.from(set).sort((a, b) => a.localeCompare(b));
 
-            // 子のフィルタ
+            // filter children
             const childHits = children.filter(c => {
                 const matchSearchText = c.toLowerCase().includes(filter.searchText?.toLowerCase() ?? "");
                 const matchType = c.includes(filter.bundleDiffType ?? "");
@@ -276,7 +276,7 @@ export default function DiffPage() {
                     ref={parentRef}
                     className="overflow-auto max-h-[60vh] border border-gray-600 rounded-md"
                 >
-                    {/* ← オーバーレイの sticky ヘッダ（常に1枚だけ） */}
+                    {/* sticky header overlay (one at a time) */}
                     {currentParent && (
                         <div className="sticky top-0 z-20 pointer-events-none">
                             <div
@@ -288,7 +288,7 @@ export default function DiffPage() {
                         </div>
                     )}
 
-                    {/* 既存の仮想リスト */}
+                    {/* virtual list */}
                     <div style={{ height: `${filteredBundleDiffsVirtualizer.getTotalSize()}px`, position: 'relative' }}>
                         {virtualItems.map((virtualRow) => {
                             const row = allRows[virtualRow.index];
@@ -331,7 +331,7 @@ export default function DiffPage() {
                                             <ContextMenuItem onClick={() => {
                                                 navigator.clipboard.writeText(row.label);
                                             }}>
-                                                行をコピーする
+                                                Copy row
                                             </ContextMenuItem>
                                         </ContextMenuContent>
                                     </ContextMenu>

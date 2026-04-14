@@ -10,6 +10,7 @@ import {
 import { uploadBuildLayout, prepareUpload, getUploadProgress, clearUpload } from '@/lib/client/api';
 import path from 'path'
 import { formatElapsed } from '@/lib/utils';
+import { env } from '@/lib/env';
 
 interface UploadDialogProps {
     open: boolean;
@@ -17,7 +18,8 @@ interface UploadDialogProps {
 }
 
 export default function UploadDialog({ open, onClose }: UploadDialogProps) {
-    const TimeoutMs: number = Number(process.env.NEXT_PUBLIC_UPLOAD_TIMEOUT_MS ?? 300000);
+    const TimeoutMs: number = env.UPLOAD_TIMEOUT_MS;
+    const PollingMs: number = env.UPLOAD_POLLING_MS;
 
     const [file, setFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
@@ -37,7 +39,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
         const session_id = (await prepareUpload()).uuid;
         const start = Date.now();
-        const status = "アップロード準備中なう";
+        const status = "Preparing upload...";
         setStatus(status);
         setCancel(false);
         setIsUploading(true);
@@ -61,7 +63,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 if(!isCancel) {
                     stepPolling(start);
                 }
-            }, Number(process.env.NEXT_PUBLIC_UPLOAD_POLLING_MS ?? 5000));
+            }, PollingMs);
         };
 
         setStartTime(start)
@@ -89,7 +91,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="p-4 bg-gray-900 text-white rounded-md border border-gray-700 w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>ビルドレイアウトのアップロード</DialogTitle>
+                    <DialogTitle>Upload Build Layout</DialogTitle>
                 </DialogHeader>
                 <div>
                     <div className="mb-4">
@@ -97,7 +99,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                             htmlFor="file-upload"
                             className="cursor-pointer inline-block bg-gray-700 hover:bg-gray-600 text-white font-medium py-1 px-4 rounded"
                         >
-                            {file?.name ? file?.name : 'ファイルを選択'}
+                            {file?.name ? file?.name : 'Select file'}
                         </label>
                         <input
                             id="file-upload"
@@ -112,7 +114,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                             className="bg-zinc-800 p-2 rounded text-white w-full"
                             value={tag}
                             onChange={(e) => setTag(e.target.value)}
-                            placeholder="Release Tag を入力"
+                            placeholder="Enter Release Tag"
                         />
                     </div>
                     <div className="mb-4" style={{ width: '250px' }}>
@@ -120,7 +122,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                             className="bg-zinc-800 p-2 rounded text-white w-full"
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
-                            placeholder="コメント を入力"
+                            placeholder="Enter comment"
                         />
                     </div>
                     <button
@@ -128,8 +130,8 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                         disabled={isUploading}
                         onClick={handleUpload}
                     >
-                        {isCancel ? "エラーが発生しました！！！！" 
-                                  : isUploading ? `${status} ${elapsedStatus}` : 'アップロード'}
+                        {isCancel ? "An error occurred!"
+                                  : isUploading ? `${status} ${elapsedStatus}` : 'Upload'}
                     </button>
                 </div>
             </DialogContent>

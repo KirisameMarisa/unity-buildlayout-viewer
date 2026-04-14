@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { AssetEntry, classColorMap, FetchState, Filter, Snapshot } from '@/lib/types';
+import { AssetEntry, classColorMap, Filter, Snapshot } from '@/lib/types';
 import SnapshotAssetSelector from './custom-ui/SnapshotAssetSelector';
 import SearchBox from './ui/search-box';
 import FilterRadioSelector from './custom-ui/FilterRadioSelector';
@@ -14,7 +14,6 @@ import {
     ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useAppStore } from '@/store/appStore';
-import path from 'path';
 
 export default function SearchPage() {
 
@@ -95,7 +94,7 @@ export default function SearchPage() {
                     if (rx) {
                         if (!rx.test(e.name!) && !(e.guid && rx.test(e.guid))) return false;
                     } else {
-                        // 高速パス（*なし）: includes(小文字)
+                        // fast path (no wildcard): includes(lowercase)
                         const nameLower = e.name!.toLowerCase();
                         const guidLower = e.guid ? e.guid.toLowerCase() : "";
 
@@ -107,7 +106,7 @@ export default function SearchPage() {
             });
         }
 
-        // 非破壊ソート（元配列は触らない）
+        // non-destructive sort (do not mutate original)
         if (result.length > 1) {
             result = result.slice().sort((a, b) => collator.compare(a.name!, b.name!));
         }
@@ -154,7 +153,7 @@ export default function SearchPage() {
                                             });
                                             useAppStore.getState().setPage("depend");
                                         }}>
-                                            依存の詳細へ
+                                            Open dependency details
                                         </ContextMenuItem>
                                     </ContextMenuContent>
                                 </ContextMenu>
