@@ -2,19 +2,16 @@
 
 import { useEffect, useState, useRef, useMemo } from "react";
 
-import "@xyflow/react/dist/style.css";
 import { DiffEntry, Filter, DiffTypeColorMap, DiffType, Snapshot, AssetEntry, TreeRow, BundleDiffTypeColorMap, BundleDiffType } from "@/lib/types";
-import SnapshotDiffSelector from "./custom-ui/SnapshotDiffSelector";
-import ProgressBar from "./custom-ui/ProgressBar";
-import SearchBox from "./ui/search-box";
+import SnapshotDiffSelector from "./SnapshotDiffSelector";
+import ProgressBar from "@/components/ui/progress-bar";
+import SearchBox from "@/components/ui/search-box";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import FilterRadioSelector from "./custom-ui/FilterRadioSelector";
+import FilterRadioSelector from "@/components//ui/filter-radio-selector";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { fetchDiff } from "@/lib/client/api";
-import Box from "@mui/material/Box";
-import { SimpleTreeView, TreeItem } from "@mui/x-tree-view";
 import { BuildDiffResultText } from "@/lib/utils";
-import MultiComboBox from "./ui/multi-combobox";
+import MultiComboBox from "@/components/ui/multi-combobox";
 import {
     ContextMenu,
     ContextMenuContent,
@@ -316,7 +313,6 @@ export default function DiffPage() {
                                                 ].join(" ")}
                                                 style={{ paddingLeft: `${row.depth * 32}px`, height: 32 }}
                                             >
-
                                                 {isParent ? (
                                                     <span className="inline-block select-none" />
                                                 ) : (

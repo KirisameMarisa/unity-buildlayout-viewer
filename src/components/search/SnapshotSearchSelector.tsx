@@ -4,19 +4,19 @@ import React, { useEffect, useMemo } from 'react';
 import { fetchEntriesForSnapshot, fetchLinksForSnapshot } from '@/lib/client/api';
 import { AssetEntry, AssetLink, Snapshot } from '@/lib/types';
 import { formatSnapshotLabel } from '@/lib/utils';
-import ComboBox from '../ui/combo-box';
+import ComboBox from '@/components/ui/combo-box';
 import { useNavigationStore } from '@/store/navigationStore';
 import { useSelectorStore } from '@/store/selectorStore';
-import { usePlatforms, useSnapshotData } from '@/hooks/useSnapshotData';
+import { usePlatforms, useSnapshotData } from '@/lib/hooks/useSnapshotData';
 
-interface SnapshotAssetSelectorProps {
+interface SnapshotSearchSelectorProps {
     onChangeSnapshot?: (snapshot: Snapshot) => void;
     setProgress: (value: number) => void;
     setAssetEntries?: (value: AssetEntry[]) => void;
     setAssetLinks?: (value: AssetLink[]) => void;
 }
 
-export default function SnapshotAssetSelector({ onChangeSnapshot, setProgress, setAssetEntries, setAssetLinks }: SnapshotAssetSelectorProps) {
+export default function SnapshotSearchSelector({ onChangeSnapshot, setProgress, setAssetEntries, setAssetLinks }: SnapshotSearchSelectorProps) {
     const navigationState = useNavigationStore();
     const store = useSelectorStore();
     const { platform, releaseTag, selectedResult } = store.assetSelector;

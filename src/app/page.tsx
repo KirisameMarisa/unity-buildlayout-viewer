@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect } from 'react';
-import SearchPage from '@/components/SearchPage';
-import DiffPage from '@/components/DiffPage';
-import DependencyViewer from '@/components/DependencyViewer';
+import SearchPage from '@/components/search';
+import DiffPage from '@/components/diff';
+import DependencyViewer from '@/components/search/DependencyViewer';
 import UploadDialog from '@/components/Upload';
 import SnapshotsEditor from '@/components/SnapshotsEditor';
 

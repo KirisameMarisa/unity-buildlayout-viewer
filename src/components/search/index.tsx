@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { AssetEntry, classColorMap, Filter, Snapshot } from '@/lib/types';
-import SnapshotAssetSelector from './custom-ui/SnapshotAssetSelector';
-import SearchBox from './ui/search-box';
-import FilterRadioSelector from './custom-ui/FilterRadioSelector';
-import ProgressBar from './custom-ui/ProgressBar';
+import SnapshotSearchSelector from './SnapshotSearchSelector';
+import SearchBox from '../ui/search-box';
+import FilterRadioSelector from '../ui/filter-radio-selector';
+import ProgressBar from '../ui/progress-bar';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
     ContextMenu,
@@ -170,7 +170,7 @@ export default function SearchPage() {
             <ProgressBar progress={progress} />
 
             <div className="flex gap-4 items-end">
-                <SnapshotAssetSelector
+                <SnapshotSearchSelector
                     setAssetEntries={x => {
                         setAssetEntries(x);
                         setFilteredEntries(x);

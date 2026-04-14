@@ -4,13 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns/format';
 import { Snapshot } from '@/lib/types';
 import { EditSnapshot, getPlatforms, getReleaseTags, getSnapshots } from '@/lib/client/api';
-import { Card, CardContent, CardHeader } from './ui/card';
-import { Button } from './ui/button';
-import { Checkbox } from './ui/checkbox';
-import { Textarea } from './ui/textarea';
-import { Label } from "@/components/ui/label";
-import { Input } from './ui/input';
-import ComboBox from './ui/combo-box';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import ComboBox from '@/components/ui/combo-box';
 import { ja } from 'date-fns/locale/ja';
 
 export default function SnapshotsEditor() {

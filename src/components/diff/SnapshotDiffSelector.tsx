@@ -3,9 +3,9 @@
 import React, { useEffect, useMemo } from 'react';
 import { Snapshot } from '@/lib/types';
 import { formatSnapshotLabel } from '@/lib/utils';
-import ComboBox from '../ui/combo-box';
+import ComboBox from '@/components/ui/combo-box';
 import { useSelectorStore } from '@/store/selectorStore';
-import { usePlatforms, useSnapshotData } from '@/hooks/useSnapshotData';
+import { usePlatforms, useSnapshotData } from '@/lib/hooks/useSnapshotData';
 
 interface SnapshotDiffSelectorProps {
     onChangeSnap?: (snapA: Snapshot, snapB: Snapshot) => void;

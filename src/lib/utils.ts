@@ -83,7 +83,6 @@ export function BuildDiffResultText(
         return formatHeader(aLabel, bLabel, metaA, metaB) + "\n(no entries)\n";
     }
 
-    // グルーピング
     const missing = entries.filter(e => e.isMissing);
     const added = entries.filter(e => e.isAdd);
     const guidBundlesChanged = entries.filter(e =>
@@ -94,7 +93,6 @@ export function BuildDiffResultText(
     );
     const sizeChanged = entries.filter(e => !e.isAdd && !e.isMissing && e.size_diff);
 
-    // 並び順（名前昇順）
     const byName = (a: DiffEntry, b: DiffEntry) => a.name.localeCompare(b.name);
 
     missing.sort(byName);
@@ -155,7 +153,6 @@ export function formatElapsed(elapsedMs: number): string {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
 
-    // ゼロ埋め（2桁表示）
     const mm = String(minutes).padStart(2, '0');
     const ss = String(seconds).padStart(2, '0');
 
