@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model asset_entries {
+  id            Int              @id @default(autoincrement())
+  snapshot_id   Int?
+  rid           Int?
+  class_name    String?
+  size          BigInt?
+  streamed_size BigInt?
+  name          String?
+  guid          String?
+  internal_guid String?
+  hash          String?
+  snapshot      asset_snapshots? @relation(fields: [snapshot_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model asset_links {
+  id          Int              @id @default(autoincrement())
+  snapshot_id Int?
+  from_id     Int?
+  to_id       Int?
+  link_type   String?
+  snapshot    asset_snapshots? @relation(fields: [snapshot_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model asset_snapshots {
+  id             Int             @id @default(autoincrement())
+  player_version String?
+  platform       String?
+  created_at     DateTime?       @default(now()) @db.Timestamp(6)
+  build_time     DateTime?       @db.Timestamp(6)
+  tag            String?
+  comment        String?
+  version        String?
+  deleted        Boolean @map("delete") @default(false)
+  entries        asset_entries[]
+  links          asset_links[]
+}
