@@ -39,7 +39,7 @@
     "elkjs": "^0.10.0",
     "hono": "^4.0.0",
     "lucide-react": "^0.525.0",
-    "next": "15.2.3",
+    "next": "^15.5.15",
     "radix-ui": "^1.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -49,6 +49,16 @@
     "uuid": "^11.1.0",
     "web-worker": "^1.5.0",
     "zustand": "^5.0.6"
+  },
+  "optionalDependencies": {
+    "@tailwindcss/oxide-darwin-arm64": "^4.0.14",
+    "@tailwindcss/oxide-darwin-x64": "^4.0.14",
+    "@tailwindcss/oxide-linux-x64-gnu": "^4.0.14",
+    "@tailwindcss/oxide-win32-x64-msvc": "^4.0.14",
+    "lightningcss-darwin-arm64": "^1.29.2",
+    "lightningcss-darwin-x64": "^1.29.2",
+    "lightningcss-linux-x64-gnu": "^1.29.2",
+    "lightningcss-win32-x64-msvc": "^1.29.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
