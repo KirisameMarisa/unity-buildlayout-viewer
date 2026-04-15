@@ -12,6 +12,10 @@ if (!outBase) {
     outBase = undefined;
 }
 
+console.log(`Product Name: ${productName}`);
+console.log(`CI Build: ${isCiBuild}`);
+console.log(`Output Base Directory: ${outBase ?? "Not Set, using project root"}`);
+
 function applyCiDefaults() {
     if (!isCiBuild) return;
 
