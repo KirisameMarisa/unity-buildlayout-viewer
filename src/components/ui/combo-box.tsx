@@ -11,6 +11,7 @@ interface ComboBoxProps {
     setValue: (value: string) => void;
     require?: boolean;
     menuPlacement?: MenuPlacement;
+    disabled?: boolean;
 }
 
 export default function ComboBox({
@@ -20,6 +21,7 @@ export default function ComboBox({
     setValue,
     require = false,
     menuPlacement = 'bottom',
+    disabled = false,
 }: ComboBoxProps) {
     const selectOptions = options.map((opt) => ({ label: opt, value: opt }));
     const selectedOption = selectOptions.find((opt) => opt.value === value) || null;
@@ -70,6 +72,7 @@ export default function ComboBox({
                 }}
                 menuPlacement={menuPlacement}
                 isSearchable={true}
+                isDisabled={disabled}
             />
         </div>
     );

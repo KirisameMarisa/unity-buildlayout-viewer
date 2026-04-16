@@ -44,7 +44,7 @@ app.get('/analyze/buildlayout/snapshots/tags', async (c) => {
             select: { tag: true },
             distinct: ['tag'],
             orderBy: { build_time: 'desc' },
-            where: { platform, NOT: [{ tag: '' }, { tag: 'Manual Upload from Web' }] },
+            where: { platform, NOT: [{ tag: '' }] },
         })
         return c.json(tags)
     } catch {
@@ -77,6 +77,7 @@ app.get('/analyze/buildlayout/snapshots', async (c) => {
         const tag = c.req.query('tag') ?? null
         const player_version = c.req.query('player_version') ?? null
         const hasAll = c.req.query('all') !== undefined
+        const withCount = c.req.query('count') !== undefined
 
         let where: any = { platform, tag }
         if (player_version) where.player_version = player_version
@@ -87,7 +88,7 @@ app.get('/analyze/buildlayout/snapshots', async (c) => {
         const snapshots = await prisma.asset_snapshots.findMany({
             orderBy: { build_time: 'desc' },
             where,
-            include: { _count: { select: { entries: true } } },
+            ...(withCount && { include: { _count: { select: { entries: true } } } }),
         })
         return c.json(snapshots)
     } catch {

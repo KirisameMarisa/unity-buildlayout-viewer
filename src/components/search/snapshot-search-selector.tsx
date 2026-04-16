@@ -22,7 +22,7 @@ export default function SnapshotSearchSelector({ onChangeSnapshot, setProgress, 
     const { platform, releaseTag, selectedResult } = store.assetSelector;
 
     const platforms = usePlatforms();
-    const { releaseTags, snapshots, snapFormattedList } = useSnapshotData(platform, releaseTag);
+    const { releaseTags, snapshots, loadingSnapshots, snapFormattedList } = useSnapshotData(platform, releaseTag);
 
     const selectedSnapshot = useMemo(
         () => snapshots.find(s => formatSnapshotLabel(s) === selectedResult),
@@ -74,13 +74,13 @@ export default function SnapshotSearchSelector({ onChangeSnapshot, setProgress, 
     return (
         <div className="flex gap-4 items-end">
             <div style={{ width: '200px' }}>
-                <ComboBox label="Platform" options={platforms} value={platform} setValue={(v) => store.setAssetSelector({ platform: v })} />
+                <ComboBox label="Platform" options={platforms} value={platform} setValue={store.setAssetSelectorPlatform} />
             </div>
             <div style={{ width: '200px' }}>
-                <ComboBox label="Release Tag" options={releaseTags} value={releaseTag} setValue={(v) => store.setAssetSelector({ releaseTag: v })} />
+                <ComboBox label="Release Tag" options={releaseTags} value={releaseTag} setValue={(v) => store.setAssetSelector({ releaseTag: v, selectedResult: '' })} />
             </div>
             <div style={{ width: '350px' }}>
-                <ComboBox label="Build" options={snapFormattedList} value={selectedResult} setValue={(v) => store.setAssetSelector({ selectedResult: v })} />
+                <ComboBox label="Build" options={snapFormattedList} value={selectedResult} setValue={(v) => store.setAssetSelector({ selectedResult: v })} disabled={loadingSnapshots} />
             </div>
             {selectedSnapshot?.comment?.trim() && (
                 <div className="flex-1">

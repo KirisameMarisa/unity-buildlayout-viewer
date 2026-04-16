@@ -16,8 +16,8 @@ export default function SnapshotDiffSelector({ onChangeSnap }: SnapshotDiffSelec
     const { diffPlatform, diffSelectorA, diffSelectorB } = store;
 
     const platforms = usePlatforms();
-    const snapA = useSnapshotData(diffPlatform, diffSelectorA.releaseTag);
-    const snapB = useSnapshotData(diffPlatform, diffSelectorB.releaseTag);
+    const { loadingSnapshots: loadingA, ...snapA } = useSnapshotData(diffPlatform, diffSelectorA.releaseTag);
+    const { loadingSnapshots: loadingB, ...snapB } = useSnapshotData(diffPlatform, diffSelectorB.releaseTag);
 
     const selectedSnapshotA = useMemo(
         () => snapA.snapshots.find(s => formatSnapshotLabel(s) === diffSelectorA.selectedResult),
@@ -40,7 +40,7 @@ export default function SnapshotDiffSelector({ onChangeSnap }: SnapshotDiffSelec
             </div>
             <div className="flex gap-4 border border-gray-500">
                 <div style={{ width: '180px' }}>
-                    <ComboBox label="Release Tag A" options={snapA.releaseTags} value={diffSelectorA.releaseTag} setValue={(v) => store.setDiffSelectorA({ releaseTag: v })} />
+                    <ComboBox label="Release Tag A" options={snapA.releaseTags} value={diffSelectorA.releaseTag} setValue={(v) => store.setDiffSelectorA({ releaseTag: v, selectedResult: '' })} />
                 </div>
                 <div style={{ width: '350px' }}>
                     <ComboBox
@@ -48,12 +48,13 @@ export default function SnapshotDiffSelector({ onChangeSnap }: SnapshotDiffSelec
                         options={snapA.snapFormattedList}
                         value={diffSelectorA.selectedResult}
                         setValue={(v) => store.setDiffSelectorA({ selectedResult: v })}
+                        disabled={loadingA}
                     />
                 </div>
             </div>
             <div className="flex gap-4 border border-gray-500">
                 <div style={{ width: '180px' }}>
-                    <ComboBox label="Release Tag B" options={snapB.releaseTags} value={diffSelectorB.releaseTag} setValue={(v) => store.setDiffSelectorB({ releaseTag: v })} />
+                    <ComboBox label="Release Tag B" options={snapB.releaseTags} value={diffSelectorB.releaseTag} setValue={(v) => store.setDiffSelectorB({ releaseTag: v, selectedResult: '' })} />
                 </div>
                 <div style={{ width: '350px' }}>
                     <ComboBox
@@ -61,6 +62,7 @@ export default function SnapshotDiffSelector({ onChangeSnap }: SnapshotDiffSelec
                         options={snapB.snapFormattedList}
                         value={diffSelectorB.selectedResult}
                         setValue={(v) => store.setDiffSelectorB({ selectedResult: v })}
+                        disabled={loadingB}
                     />
                 </div>
             </div>
