@@ -65,14 +65,14 @@ export async function getReleaseTags(platform: string): Promise<string[]> {
         fetch(`/api/analyze/buildlayout/snapshots/tags?platform=${platform}`),
     ]);
 
-    const manualUpload = "Manual Upload from Web";
+    const isDateTag = (t: string) => /^\d{2}\/\d{2}\/\d{2}/.test(t);
 
-    let releaseTags: string[] = [];
-    for (const v of await snapRes.json()) {
-        releaseTags.push(v.tag);
-    }
-    releaseTags = [...releaseTags, manualUpload]
-    return releaseTags;
+    const releaseTags: string[] = (await snapRes.json()).map((v: { tag: string }) => v.tag);
+
+    const dateTags = releaseTags.filter(isDateTag).sort((a, b) => b.localeCompare(a));
+    const otherTags = releaseTags.filter((t) => !isDateTag(t)).sort((a, b) => a.localeCompare(b));
+
+    return [...dateTags, ...otherTags];
 }
 
 export async function getSnapshots(platform: string, releaseTag: string, all: boolean = false): Promise<Snapshot[]> {

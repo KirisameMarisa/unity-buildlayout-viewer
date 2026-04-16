@@ -88,7 +88,7 @@ export default function DiffBundleView({ diffBundleMap, filteredBundleDiffs, fil
                 )}
 
                 {/* virtual list */}
-                <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }}>
+                <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative', scrollbarWidth: "thin", scrollbarColor: "#333 #181818" }}>
                     {virtualItems.map((virtualRow) => {
                         const row = allRows[virtualRow.index];
                         const isParent = row.kind === 'parent';

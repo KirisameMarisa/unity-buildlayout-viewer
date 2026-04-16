@@ -75,9 +75,11 @@ app.get('/analyze/buildlayout/snapshots', async (c) => {
     try {
         const platform = c.req.query('platform') ?? null
         const tag = c.req.query('tag') ?? null
+        const player_version = c.req.query('player_version') ?? null
         const hasAll = c.req.query('all') !== undefined
 
         let where: any = { platform, tag }
+        if (player_version) where.player_version = player_version
         if (!hasAll) {
             where.NOT = { deleted: true }
         }
@@ -85,6 +87,7 @@ app.get('/analyze/buildlayout/snapshots', async (c) => {
         const snapshots = await prisma.asset_snapshots.findMany({
             orderBy: { build_time: 'desc' },
             where,
+            include: { _count: { select: { entries: true } } },
         })
         return c.json(snapshots)
     } catch {

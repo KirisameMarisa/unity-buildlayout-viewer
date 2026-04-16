@@ -5,7 +5,7 @@ import { pick } from 'stream-json/filters/Pick';
 import { streamArray } from 'stream-json/streamers/StreamArray';
 import StreamObject from 'stream-json/streamers/StreamObject';
 import { prisma } from '@/server/lib/db';
-import { asset_entries, asset_links } from "@prisma/client"
+import { asset_entries, asset_links, Prisma } from "@prisma/client"
 
 import "server-only"
 
@@ -66,6 +66,7 @@ export async function analyzeBuildLayout(
         await sleep(5);
 
         const snapshot_meta = await extractSnapshotMetadata(path);
+        console.log(`[analyzeBuildLayout] metadata: platform=${snapshot_meta.platform} playerVersion=${snapshot_meta.playerVersion} buildTime=${snapshot_meta.buildTime.toISOString()}`);
 
         const snapshot_ids = await prisma.asset_snapshots.findMany({
             where: {
@@ -76,7 +77,9 @@ export async function analyzeBuildLayout(
             select: { id: true },
         });
 
-        console.log(snapshot_ids);
+        if (snapshot_ids.length > 0) {
+            console.log(`[analyzeBuildLayout] marking ${snapshot_ids.length} existing snapshot(s) as deleted`)
+        }
 
         for (const s of snapshot_ids) {
             await prisma.asset_snapshots.update({
@@ -87,42 +90,49 @@ export async function analyzeBuildLayout(
             });
         }
 
-        step.mark(uuid, "Registering snapshot...");
+        step.mark(uuid, "Parsing BuildLayout.json...");
         await sleep(5);
 
-        const snapshot = await prisma.asset_snapshots.create({
-            data: {
-                platform: snapshot_meta.platform,
-                player_version: snapshot_meta.playerVersion,
-                build_time: snapshot_meta.buildTime,
-                tag,
-                comment,
-                version: cVersion,
-            }
-        });
-        const snapshot_id = snapshot.id;
+        const parseStart = Date.now();
+        const { assetMap, assetLinks } = await parseAssets(uuid, path, 0);
+        console.log(`[analyzeBuildLayout] parse done: assets=${assetMap.size} links=${assetLinks.length} elapsed=${Date.now() - parseStart}ms`);
 
-        const { assetMap, assetLinks } = await parseAssets(uuid, path, snapshot_id);
-
-        for (const link of assetLinks) {
-            link.snapshot_id = snapshot_id;
-        }
-
-        step.mark(uuid, "Saving assets to database...");
+        step.mark(uuid, "Saving assets to DB...");
         await sleep(5);
 
-        await prisma.asset_entries.createMany({
-            data: Array.from(assetMap.values()).map(e => e.sql),
-            skipDuplicates: false,
-        });
+        const dbStart = Date.now();
+        await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+            const snapshot = await tx.asset_snapshots.create({
+                data: {
+                    platform: snapshot_meta.platform,
+                    player_version: snapshot_meta.playerVersion,
+                    build_time: snapshot_meta.buildTime,
+                    tag,
+                    comment,
+                    version: cVersion,
+                }
+            });
 
-        await prisma.asset_links.createMany({
-            data: assetLinks,
-            skipDuplicates: false
-        })
+            const snapshot_id = snapshot.id;
+            console.log(`[analyzeBuildLayout] snapshot created: id=${snapshot_id}`);
+
+            await tx.asset_entries.createMany({
+                data: Array.from(assetMap.values()).map(e => ({ ...e.sql, snapshot_id })),
+                skipDuplicates: false,
+            });
+
+            await tx.asset_links.createMany({
+                data: assetLinks.map(l => ({ ...l, snapshot_id })),
+                skipDuplicates: false,
+            });
+
+            return snapshot;
+        }, { timeout: 120_000 });
+        console.log(`[analyzeBuildLayout] db save done: elapsed=${Date.now() - dbStart}ms`);
 
         fs.unlink(path, () => { });
-        step.mark(uuid, "Analysis complete!");
+        step.mark(uuid, "Done!");
+        console.log(`[analyzeBuildLayout] done uuid=${uuid}`);
 
         return {
             status: 200,
@@ -132,11 +142,11 @@ export async function analyzeBuildLayout(
             snapshot_meta,
         };
     } catch (err) {
-        console.error(err);
+        console.error(`[analyzeBuildLayout] error uuid=${uuid}`, err);
 
         return {
             status: 500,
-            message: `Failed: ${err}`,
+            message: `${err}`,
         };
     }
 }
@@ -264,9 +274,13 @@ async function parseAssets(uuid: string, filePath: string, snapshot_id: number):
                 data: value.data
             });
             step.mark(uuid, `Parsing BuildLayout.json... ${assetMap.size} assets`);
+            if (assetMap.size % 10000 === 0) {
+                console.log(`[parseAssets] parsing... assets=${assetMap.size}`);
+            }
         });
         pipeline.on('end', () => {
-            step.mark(uuid, "Analyzing asset dependencies...");
+            console.log(`[parseAssets] all assets parsed: total=${assetMap.size}`);
+            step.mark(uuid, "Resolving asset dependencies...");
 
             const sections = [
                 "Files",

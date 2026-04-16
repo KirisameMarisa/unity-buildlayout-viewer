@@ -46,18 +46,19 @@ export default function SnapshotSearchSelector({ onChangeSnapshot, setProgress, 
         if (!selectedSnapshot) return;
 
         const run = async () => {
-            setProgress(0);
+            setProgress(0.1);
             onChangeSnapshot?.(selectedSnapshot);
 
             try {
                 const entriesRes = await fetchEntriesForSnapshot(selectedSnapshot.id);
                 setProgress(0.4);
-                if (Array.isArray(entriesRes)) {
-                    setAssetEntries?.(entriesRes);
-                }
 
                 const linksRes = await fetchLinksForSnapshot(selectedSnapshot.id);
                 setProgress(0.8);
+
+                if (Array.isArray(entriesRes)) {
+                    setAssetEntries?.(entriesRes);
+                }
                 if (Array.isArray(linksRes)) {
                     setAssetLinks?.(linksRes);
                 }
