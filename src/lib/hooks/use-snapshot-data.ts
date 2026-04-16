@@ -14,6 +14,7 @@ export function usePlatforms(): string[] {
 export function useSnapshotData(platform: string, releaseTag: string) {
     const [releaseTags, setReleaseTags] = useState<string[]>([]);
     const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
+    const [loadingSnapshots, setLoadingSnapshots] = useState(false);
 
     useEffect(() => {
         if (!platform) return;
@@ -21,13 +22,21 @@ export function useSnapshotData(platform: string, releaseTag: string) {
     }, [platform]);
 
     useEffect(() => {
-        if (!platform || !releaseTag) return;
-        getSnapshots(platform, releaseTag).then(setSnapshots);
+        if (!platform || !releaseTag) {
+            setSnapshots([]);
+            return;
+        }
+        setSnapshots([]);
+        setLoadingSnapshots(true);
+        getSnapshots(platform, releaseTag)
+            .then(setSnapshots)
+            .finally(() => setLoadingSnapshots(false));
     }, [platform, releaseTag]);
 
     return {
         releaseTags,
         snapshots,
+        loadingSnapshots,
         snapFormattedList: snapshots.map(formatSnapshotLabel).sort((x, y) => x > y ? -1 : 1),
     };
 }
