@@ -62,6 +62,7 @@ export async function analyzeBuildLayout(
         new Promise((resolve) => setTimeout(resolve, ms));
 
     try {
+        console.log(`[analyzeBuildLayout] start uuid=${uuid} tag=${tag}`);
         step.mark(uuid, "Parsing metadata...");
         await sleep(5);
 
