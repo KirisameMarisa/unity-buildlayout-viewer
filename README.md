@@ -32,7 +32,7 @@ Upload a `BuildLayout.json`, browse all assets, and compare builds side-by-side 
 ### Asset Search
 Browse all assets in a snapshot. Filter by class, file extension, or name glob. Right-click any asset to open its dependency tree.
 
-<img alt="Asset Search" src="./images/search.png" width="60%"/>
+<img alt="Asset Search" src="https://github.com/user-attachments/assets/d7474cbf-d21c-46c2-9441-589bc5cfb1a6" width="60%"/>
 
 ### Snapshot Diff
 Compare two snapshots side-by-side. See what was added, removed, hash-changed, or size-changed — at both the asset level and the bundle level.
