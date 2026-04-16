@@ -12,7 +12,7 @@ import "server-only"
 const cVersion = "1.0";
 
 export class Step {
-    private DEFAULT = "アップロードを開始します...";
+    private DEFAULT = "Starting upload...";
     private value: Map<string, string> = new Map<string, string>();
 
     public init(key: string) {
@@ -62,7 +62,7 @@ export async function analyzeBuildLayout(
         new Promise((resolve) => setTimeout(resolve, ms));
 
     try {
-        step.mark(uuid, "Meta解析中...");
+        step.mark(uuid, "Parsing metadata...");
         await sleep(5);
 
         const snapshot_meta = await extractSnapshotMetadata(path);
@@ -87,7 +87,7 @@ export async function analyzeBuildLayout(
             });
         }
 
-        step.mark(uuid, "スナップショット登録中...");
+        step.mark(uuid, "Registering snapshot...");
         await sleep(5);
 
         const snapshot = await prisma.asset_snapshots.create({
@@ -108,7 +108,7 @@ export async function analyzeBuildLayout(
             link.snapshot_id = snapshot_id;
         }
 
-        step.mark(uuid, "アセットをDBへ登録中...");
+        step.mark(uuid, "Saving assets to database...");
         await sleep(5);
 
         await prisma.asset_entries.createMany({
@@ -122,11 +122,11 @@ export async function analyzeBuildLayout(
         })
 
         fs.unlink(path, () => { });
-        step.mark(uuid, "解析完了！");
+        step.mark(uuid, "Analysis complete!");
 
         return {
             status: 200,
-            message: "成功",
+            message: "Success",
             assetMap_count: assetMap.size,
             assetLinks_count: assetLinks.length,
             snapshot_meta,
@@ -136,7 +136,7 @@ export async function analyzeBuildLayout(
 
         return {
             status: 500,
-            message: `失敗 ${err}`,
+            message: `Failed: ${err}`,
         };
     }
 }
@@ -173,7 +173,7 @@ async function extractSnapshotMetadata(filePath: string): Promise<SnapshotMetada
             if (result.platform || result.playerVersion || result.buildTime) {
                 resolve(result);
             } else {
-                reject(new Error('snapshot 情報が見つかりません'));
+                reject(new Error('Snapshot metadata not found'));
             }
         });
 
@@ -263,10 +263,10 @@ async function parseAssets(uuid: string, filePath: string, snapshot_id: number):
                 },
                 data: value.data
             });
-            step.mark(uuid, `BuildLayout.json 解析中... ${assetMap.size} asset.`);
+            step.mark(uuid, `Parsing BuildLayout.json... ${assetMap.size} assets`);
         });
         pipeline.on('end', () => {
-            step.mark(uuid, "アセットの依存関係解析中...");
+            step.mark(uuid, "Analyzing asset dependencies...");
 
             const sections = [
                 "Files",

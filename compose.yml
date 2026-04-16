@@ -1,5 +1,6 @@
 services:
   db:
+    container_name: unity-buildlayout-viewer-db
     image: postgres:15
     environment:
       POSTGRES_USER: user
@@ -16,6 +17,7 @@ services:
       retries: 5
 
   app:
+    container_name: unity-buildlayout-viewer
     build:
       context: .
       dockerfile: ./docker/app/Dockerfile

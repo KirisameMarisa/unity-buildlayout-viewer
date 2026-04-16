@@ -42,21 +42,19 @@ export default function Home() {
     }
     return (
         <div className="flex h-screen">
-            {/* 左ナビ */}
             <div className="w-14 bg-gray-800 flex flex-col items-center py-4 space-y-4">
                 <ToolButton icon={faMagnifyingGlass} label='search' onClick={() => setPage("search")} />
                 <ToolButton icon={faCodeCompare} label='diff' onClick={() => setPage("diff")} />
                 <ToolButton icon={faUpload} label='upload' onClick={() => setPage("upload")} />
-                <ToolButton icon={faPenSquare} label='snapEdit' onClick={() => setPage("snapEdit")} />
+                <ToolButton icon={faPenSquare} label='edit' onClick={() => setPage("edit")} />
             </div>
 
-            {/* メイン表示 */}
             <div className="flex-grow bg-gray-900 p-4 overflow-hidden">
                 {currentPage === "search" && <SearchPage />}
                 {currentPage === "diff" && <DiffPage />}
                 {currentPage === "depend" && <DependencyViewer />}
                 <UploadDialog open={currentPage === "upload"} onClose={() => { setPage("search"); }}/>
-                {currentPage === "snapEdit" && <SnapshotsEditor />}
+                {currentPage === "edit" && <SnapshotsEditor />}
             </div>
         </div>
     );
