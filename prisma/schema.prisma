@@ -19,6 +19,8 @@ model asset_entries {
   internal_guid String?
   hash          String?
   snapshot      asset_snapshots? @relation(fields: [snapshot_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([snapshot_id])
 }
 
 model asset_links {
@@ -28,6 +30,8 @@ model asset_links {
   to_id       Int?
   link_type   String?
   snapshot    asset_snapshots? @relation(fields: [snapshot_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([snapshot_id])
 }
 
 model asset_snapshots {
