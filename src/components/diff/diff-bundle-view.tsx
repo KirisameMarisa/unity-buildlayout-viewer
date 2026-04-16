@@ -74,7 +74,7 @@ export default function DiffBundleView({ diffBundleMap, filteredBundleDiffs, fil
                 onChage={(x) => onFilterChange({ bundleDiffType: x as BundleDiffType })}
             />
 
-            <div ref={parentRef} className="overflow-auto max-h-[60vh] border border-gray-600 rounded-md">
+            <div ref={parentRef} className="overflow-auto max-h-[60vh] border border-gray-600 rounded-md" style={{ scrollbarWidth: "thin", scrollbarColor: "#333 #181818" }}>
                 {/* sticky header overlay (one at a time) */}
                 {currentParent && (
                     <div className="sticky top-0 z-20 pointer-events-none">
@@ -88,7 +88,7 @@ export default function DiffBundleView({ diffBundleMap, filteredBundleDiffs, fil
                 )}
 
                 {/* virtual list */}
-                <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative', scrollbarWidth: "thin", scrollbarColor: "#333 #181818" }}>
+                <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }}>
                     {virtualItems.map((virtualRow) => {
                         const row = allRows[virtualRow.index];
                         const isParent = row.kind === 'parent';

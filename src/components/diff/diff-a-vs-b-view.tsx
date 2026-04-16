@@ -36,8 +36,8 @@ export default function DiffAvsBView({ filteredDiffEntries, onFilterChange }: Di
                 </div>
             </div>
 
-            <div ref={parentRef} className="overflow-auto max-h-[65vh] border border-gray-600 rounded-md">
-                <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative', scrollbarWidth: "thin", scrollbarColor: "#333 #181818" }}>
+            <div ref={parentRef} className="overflow-auto max-h-[65vh] border border-gray-600 rounded-md" style={{ scrollbarWidth: "thin", scrollbarColor: "#333 #181818" }}>
+                <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }}>
                     {virtualizer.getVirtualItems().map((virtualRow) => {
                         const entry = filteredDiffEntries[virtualRow.index];
 

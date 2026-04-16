@@ -29,8 +29,9 @@ export default function AssetList({ filteredEntries, snapshot }: AssetListProps)
         <div
             ref={parentRef}
             className="overflow-auto max-h-[69vh] border border-gray-600 rounded-md"
+            style={{ scrollbarWidth: "thin", scrollbarColor: "#333 #181818" }}
         >
-            <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative', scrollbarWidth: "thin", scrollbarColor: "#333 #181818" }}>
+            <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative' }}>
                 {rowVirtualizer.getVirtualItems().map((virtualRow) => {
                     const entry = filteredEntries[virtualRow.index];
                     const color = classColorMap[entry.class_name!] ?? "bg-gray-700";
